@@ -9,6 +9,13 @@ import requests
 st.header('SAFEST NYC AREAS')
 
 data = requests.get("https://data.cityofnewyork.us/resource/qgea-i56i.json").json()
-@st._experimental_singleton
-st.json(data, expanded=True)
+@st.cache_data
+def load_data(url):
+    df = pd.read_json(data)
+    return df
+
+df = load_data("https://data.cityofnewyork.us/resource/qgea-i56i.json")
+st.dataframe(df)
+
+st.button("Rerun")
 
